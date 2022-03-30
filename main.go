@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -10,6 +11,10 @@ import (
 type JsonRequet struct {
 	Title string `json:"title"`
 	Text  string `json:"text"`
+}
+
+type SleepTime struct {
+	Time int `json:"time"`
 }
 
 func main() {
@@ -57,6 +62,15 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"title": json.Title, "text": json.Title})
+	})
+	r.POST("/custom-time", func(c *gin.Context) {
+		var json SleepTime
+		if err := c.ShouldBindJSON(&json); err != nil {
+			c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+			return
+		}
+		time.Sleep(time.Second * time.Duration(json.Time))
+		c.JSON(http.StatusOK, gin.H{"msg": fmt.Sprintf("sleep for %d seconds", json.Time)})
 	})
 	r.Run()
 }
