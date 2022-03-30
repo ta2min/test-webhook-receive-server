@@ -1,0 +1,12 @@
+[Unit]
+Description=App
+
+[Service]
+ExecStart=/home/ec2-user/server
+WorkingDirectory=//home/ec2-user/
+Restart=always
+Type=simple
+User=ec2-user
+
+[Install]
+WantedBy=multi-user.target
